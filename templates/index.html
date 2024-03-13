@@ -2,9 +2,21 @@
 {% block content %}
 <div style="margin-left: 50px">
     <h1>Добро пожаловать на сайт!</h1>
+    {% if not registered %}
     <p>Для продолжения регистрация обязательна!!!</p>
     <a href="{{ url_for('register') }}">Регистрация</a>
-
+    {% endif %}
+    {% if registered %}
+    <br>
+    <h3 style="margin-left: 50px">Вот список всех зарегистрированных пользователей, поздравляем, вы один из счастливчиков!</h3>
+    <div class="row">
+        {% for user in users %}
+        <p class="col-12 col-md-6">Имя пользователя: {{
+            user.username }}<br>
+            Email пользователя: {{ user.email }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
 </div>
 
 {% endblock %}

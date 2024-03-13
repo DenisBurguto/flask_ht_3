@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_wtf import CSRFProtect
 from forms import RegistrationForm
 from models import db, User
@@ -21,6 +21,9 @@ def index():
 def register():
     form = RegistrationForm()
     if request.method == 'POST' and form.validate():
+        if User.query.filter(User.email == form.email.data).all():
+            flash('Пользователь с таким email существует!!!', 'danger')
+            return redirect(url_for('register'))
         db.session.add(User(user_name=form.user_name.data, user_surname=form.user_surname.data, email=form.email.data,
                             hashed_psw=generate_password_hash(form.password.data)))
         db.session.commit()
